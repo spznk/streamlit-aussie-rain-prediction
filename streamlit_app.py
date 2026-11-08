@@ -51,7 +51,9 @@ def predict(data: pd.DataFrame, aus: dict):
 
     # Predict
     preds = aus['model'].predict(X)
-    return preds[0]
+    probas = aus['model'].predict_proba(X)
+    
+    return preds[0], probas[0, 1]
 
 
 # Load model and other instruments from file
@@ -101,5 +103,6 @@ with col2:
 
 # Prediction button
 if st.button("Predict"):
-    result = predict(pd.DataFrame(data=input_data), aus)
-    st.write(f"Rain tomorrow: {result.upper()}")
+    pred, proba = predict(pd.DataFrame(data=input_data), aus)
+    st.write(f"Rain tomorrow: {pred.upper()}")
+    st.write(f"Probability of rain tomorrow: {proba * 100}%")
