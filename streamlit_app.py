@@ -9,7 +9,7 @@ def load_model():
 
 
 @st.cache_data
-def load_data(_aus):
+def load_data(aus):
     # Load data from file
     df = pd.read_csv("weatherAUS.csv")
 
@@ -17,15 +17,12 @@ def load_data(_aus):
     df.dropna(subset=['RainToday', 'RainTomorrow'], inplace=True)
 
     # Run imputer
-    cols = _aus['imputer'].get_feature_names_out()
-    df[cols] = _aus['imputer'].transform(df[cols])
+    cols = aus['imputer'].get_feature_names_out()
+    df[cols] = aus['imputer'].transform(df[cols])
 
     return df
 
-def predict(X: pd.DataFrame):
-    # Ensure columns order
-    X = X.loc[:, expected_cols]
-    
+def predict(X: pd.DataFrame, aus: dict):
     # Run scaler
     num_cols = aus['numeric_cols']
     X[num_cols] = aus['scaler'].transform(X[num_cols])
@@ -44,6 +41,10 @@ def predict(X: pd.DataFrame):
         [X.drop(columns=cat_cols), encoded_data],
         axis=1
     )
+
+    # Ensure columns order
+    expected_cols = aus['model'].feature_names_in_
+    X = X.loc[:, expected_cols]
 
     # Predict
     preds = aus['model'].predict(X)
@@ -97,5 +98,5 @@ with col2:
 
 # Prediction button
 if st.button("Predict"):
-    result = predict(pd.DataFrame(data=input_data))
+    result = predict(pd.DataFrame(data=input_data), aus)
     st.write(f"Rain tomorrow: {result.upper()}")
