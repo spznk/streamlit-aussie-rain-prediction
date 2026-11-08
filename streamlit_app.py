@@ -69,9 +69,7 @@ st.header("Select parameters and click Predict button")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.text("Column 1")
-    # min_temp = st.slider('Min Temperature (C)', -20.0, 30.0, 0.0)
-    # max_temp = st.slider('Max Temperature (C)', -5.0, 45.0, 0.0)
+    st.text("Number parameters")
 
     for col in num_cols:
         max_value = df[col].max()
@@ -81,6 +79,8 @@ with col1:
         
 
 with col2:
-    st.text("Column 2")
-    # rainfall = st.slider('Rainfall (mm)', 0.0, 50.0, 0.0)
-    # evaporation = st.slider('Evaporation', 0.0, 5.0, 0.5)
+    st.text("Selection parameters")
+
+    for col in cat_cols:
+        values = df[col].unique()
+        input_data[col] = st.slider(col, values)
