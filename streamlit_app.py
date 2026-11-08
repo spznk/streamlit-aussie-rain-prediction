@@ -51,10 +51,16 @@ st.markdown("This model predicts whether there will be rain based on previous da
 
 # Show table with mean values
 st.header("Mean numeric parameter values depending on 'RainTomorrow' value")
+
 target_col = aus['target_col']
+input_cols = aus['input_cols']
 num_cols = aus['numeric_cols']
+cat_cols = aus['categorical_cols']
+
 mean_values = df[[*num_cols, target_col]].groupby(target_col).mean().reset_index()
 st.dataframe(mean_values)
+
+input_data = {}
 
 # Header for parameters selection
 st.header("Select parameters and click Predict button")
@@ -64,10 +70,17 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.text("Column 1")
-    min_temp = st.slider('Min Temperature (C)', -20.0, 30.0, 1.0)
-    max_temp = st.slider('Max Temperature (C)', -5.0, 45.0, 1.0)
+    # min_temp = st.slider('Min Temperature (C)', -20.0, 30.0, 0.0)
+    # max_temp = st.slider('Max Temperature (C)', -5.0, 45.0, 0.0)
+
+    for col in num_cols:
+        max_value = df[col].max()
+        min_value = df[col].min()
+        mean_value = df[col].mean()
+        input_data[col] = st.slider(col, min_value, max_value, mean_value)
+        
 
 with col2:
     st.text("Column 2")
-    rainfall = st.slider('Rainfall (mm)', 0.0, 50.0, 1.0)
-    evaporation = st.slider('Evaporation', 0.0, 5.0, 0.5)
+    # rainfall = st.slider('Rainfall (mm)', 0.0, 50.0, 0.0)
+    # evaporation = st.slider('Evaporation', 0.0, 5.0, 0.5)
