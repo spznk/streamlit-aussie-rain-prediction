@@ -71,7 +71,7 @@ with col1:
         max_value = df[col].max()
         min_value = df[col].min()
         mean_value = df[col].mean()
-        input_data[col] = st.slider(col, min_value, max_value, mean_value)
+        input_data[col] = [st.slider(col, min_value, max_value, mean_value)]
         
 
 with col2:
@@ -79,7 +79,7 @@ with col2:
 
     for col in cat_cols:
         values = df[col].unique()
-        input_data[col] = st.pills(col, values, selection_mode="single")
+        input_data[col] = [st.pills(col, values, selection_mode="single")]
 
 # Prediction button
 if st.button("Will there be rain tomorrow?"):
