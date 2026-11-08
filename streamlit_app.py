@@ -83,5 +83,5 @@ with col2:
 
 # Prediction button
 if st.button("Will there be rain tomorrow?"):
-    result = predict(X)
+    result = predict(pd.DataFrame(data=input_data))
     st.write(f"Answer: {result}.upper()")
