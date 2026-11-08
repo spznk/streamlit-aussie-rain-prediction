@@ -3,7 +3,29 @@ import joblib
 import pandas as pd
 
 
+@st.cache_resource
+def load_model():
+    return joblib.load('aussie_rain_tree.joblib')
+
+
+@st.cache_data
+def load_data(_aus):
+    # Load data from file
+    df = pd.read_csv("weatherAUS.csv")
+
+    # Remove instances where 'RainToday' or 'RainTomorrow' are absent
+    df.dropna(subset=['RainToday', 'RainTomorrow'], inplace=True)
+
+    # Run imputer
+    cols = _aus['imputer'].get_feature_names_out()
+    df[cols] = _aus['imputer'].transform(df[cols])
+
+    return df
+
 def predict(X: pd.DataFrame):
+    # Ensure columns order
+    X = X.loc[:, expected_cols]
+    
     # Run scaler
     num_cols = aus['numeric_cols']
     X[num_cols] = aus['scaler'].transform(X[num_cols])
@@ -29,21 +51,15 @@ def predict(X: pd.DataFrame):
 
 
 # Load model and other instruments from file
-aus = joblib.load('aussie_rain_tree.joblib')
+aus = load_model()
+
 target_col = aus['target_col']
 input_cols = aus['input_cols']
 num_cols = aus['numeric_cols']
 cat_cols = aus['categorical_cols']
-cols_for_imputer = aus['imputer'].get_feature_names_out()
 
-# Load data from file
-df = pd.read_csv("weatherAUS.csv")
-
-# Remove instances where 'RainToday' or 'RainTomorrow' are absent
-df.dropna(subset=['RainToday', 'RainTomorrow'], inplace=True)
-
-# Run imputer
-df[cols_for_imputer] = aus['imputer'].transform(df[cols_for_imputer])
+# Load data
+df = load_data(aus)
 
 # App header
 st.title("Rain prediction in Australia")
