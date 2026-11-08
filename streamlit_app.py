@@ -51,5 +51,7 @@ st.markdown("This model predicts whether there will be rain based on previous da
 
 # Show table with mean values
 st.header("Mean parameter values depending on target value")
-mean_values = df.groupby(aus['target_col']).mean().reset_index()
+target_col = aus['target_col']
+num_cols = aus['numeric_cols']
+mean_values = df[[*num_cols, target_col]].groupby(target_col).mean().reset_index()
 st.dataframe(mean_values)
