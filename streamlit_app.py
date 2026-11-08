@@ -105,4 +105,4 @@ with col2:
 if st.button("Predict"):
     pred, proba = predict(pd.DataFrame(data=input_data), aus)
     st.write(f"Rain tomorrow: {pred.upper()}")
-    st.write(f"Probability of rain tomorrow: {(proba * 100):.2f}%")
+    st.write(f"(probability is {(proba * 100):.2f}%)")
