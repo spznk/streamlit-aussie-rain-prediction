@@ -76,9 +76,10 @@ with col2:
 
     for col in cat_cols:
         values = df[col].unique()
+        values = values[~pd.isna(values)]
         input_data[col] = [st.pills(col, values, selection_mode="single")]
 
 # Prediction button
-if st.button("Will there be rain tomorrow?"):
+if st.button("Predict"):
     result = predict(pd.DataFrame(data=input_data))
-    st.write(f"Answer: {result.upper()}")
+    st.write(f"Rain tomorrow: {result.upper()}")
