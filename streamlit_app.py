@@ -83,4 +83,4 @@ with col2:
 
     for col in cat_cols:
         values = df[col].unique()
-        input_data[col] = st.radio(col, values)
+        input_data[col] = st.pills(col, values, selection_mode="single")
