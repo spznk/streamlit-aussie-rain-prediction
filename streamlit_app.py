@@ -34,6 +34,7 @@ target_col = aus['target_col']
 input_cols = aus['input_cols']
 num_cols = aus['numeric_cols']
 cat_cols = aus['categorical_cols']
+cols_for_imputer = aus['imputer'].get_feature_names_out()
 
 # Load data from file
 df = pd.read_csv("weatherAUS.csv")
@@ -42,8 +43,7 @@ df = pd.read_csv("weatherAUS.csv")
 df.dropna(subset=['RainToday', 'RainTomorrow'], inplace=True)
 
 # Run imputer
-cols_for_imputer = aus['imputer'].get_feature_names_out()
-df[cols_for_imputer] = aus['imputer'].transform(X[cols_for_imputer])
+df[cols_for_imputer] = aus['imputer'].transform(df[cols_for_imputer])
 
 # App header
 st.title("Rain prediction in Australia")
