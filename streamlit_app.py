@@ -50,8 +50,24 @@ st.title("Rain prediction in Australia")
 st.markdown("This model predicts whether there will be rain based on previous day data")
 
 # Show table with mean values
-st.header("Mean parameter values depending on target value")
+st.header("Mean numeric parameter values depending on 'RainTomorrow' value")
 target_col = aus['target_col']
 num_cols = aus['numeric_cols']
 mean_values = df[[*num_cols, target_col]].groupby(target_col).mean().reset_index()
 st.dataframe(mean_values)
+
+# Header for parameters selection
+st.header("Select parameters and click Predict button")
+
+# Input parameters
+col1, col2 = st.columns(2)
+
+with col1:
+    st.text("Column 1")
+    min_temp = st.slider('Min Temperature (C)', -20.0, 30.0, 1.0)
+    max_temp = st.slider('Max Temperature (C)', -5.0, 45.0, 1.0)
+
+with col2:
+    st.text("Column 2")
+    rainfall = st.slider('Rainfall (mm)', 0.0, 50.0, 1.0)
+    evaporation = st.slider('Evaporation', 0.0, 5.0, 0.5)
