@@ -3,11 +3,7 @@ import joblib
 import pandas as pd
 
 
-def predict():
-    # Extract inputs and target
-    X = df[aus['input_cols']].copy()
-    y = df[aus['target_col']].copy()
-
+def predict(X: pd.DataFrame):
     # Run imputer
     cols_for_imputer = aus['imputer'].get_feature_names_out()
     X[cols_for_imputer] = aus['imputer'].transform(X[cols_for_imputer])
@@ -33,7 +29,7 @@ def predict():
 
     # Predict
     preds = aus['model'].predict(X)
-    return preds
+    return preds[0]
 
 
 # Load model and other instruments from file
@@ -84,3 +80,8 @@ with col2:
     for col in cat_cols:
         values = df[col].unique()
         input_data[col] = st.pills(col, values, selection_mode="single")
+
+# Prediction button
+if st.button("Will there be rain tomorrow?"):
+    result = predict(X)
+    st.write(f"Answer: {result}.upper()")
